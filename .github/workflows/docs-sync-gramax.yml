@@ -1,0 +1,58 @@
+name: Docs Sync (Gramax)
+
+on:
+  push:
+    branches: ["master"]
+    paths:
+      - "*.md"
+      - ".doc-root.yaml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve changed files
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" > changed.txt
+          else
+            git ls-files '*.md' .doc-root.yaml > changed.txt
+          fi
+
+      - name: Send sync webhook
+        if: ${{ secrets.GRAMAX_SYNC_WEBHOOK_URL != '' }}
+        env:
+          WEBHOOK_URL: ${{ secrets.GRAMAX_SYNC_WEBHOOK_URL }}
+        shell: bash
+        run: |
+          CHANGED_JSON=$(python3 - <<'PY'
+          import json
+          from pathlib import Path
+          files = [x.strip() for x in Path("changed.txt").read_text().splitlines() if x.strip()]
+          print(json.dumps(files))
+          PY
+          )
+
+          curl -sS -X POST "$WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"provider\": \"github\",
+              \"repository\": \"${{ github.repository }}\",
+              \"branch\": \"${{ github.ref_name }}\",
+              \"commit\": \"${{ github.sha }}\",
+              \"changed_files\": $CHANGED_JSON
+            }"
+
+      - name: No webhook configured
+        if: ${{ secrets.GRAMAX_SYNC_WEBHOOK_URL == '' }}
+        run: echo "GRAMAX_SYNC_WEBHOOK_URL is not configured. Skipping webhook sync."
