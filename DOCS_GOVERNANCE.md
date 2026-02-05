@@ -1,4 +1,6 @@
-# Documentation Governance
+---
+title: Documentation Governance
+---
 
 ## Rules
 
@@ -10,15 +12,15 @@
 
 ## Document Status
 
-- `draft`: not approved for agents.
-- `active`: reviewed and approved.
-- `deprecated`: kept for migration/history only.
+-  `draft`: not approved for agents.
+-  `active`: reviewed and approved.
+-  `deprecated`: kept for migration/history only.
 
 ## Mandatory Metadata
 
-- `owner`
-- `status`
-- `agent_ready`
-- `risk_level`
-- `last_reviewed_at`
-- `next_review_at`
+-  `owner`
+-  `status`
+-  `agent_ready`
+-  `risk_level`
+-  `last_reviewed_at`
+-  `next_review_at`

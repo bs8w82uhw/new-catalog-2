@@ -1,4 +1,6 @@
-# Gramax Sync
+---
+title: Gramax Sync
+---
 
 This repo is connected to Gramax and used as a docs source.
 
@@ -6,7 +8,7 @@ This repo is connected to Gramax and used as a docs source.
 
 Add repository secret:
 
-- `GRAMAX_SYNC_WEBHOOK_URL`
+-  `GRAMAX_SYNC_WEBHOOK_URL`
 
 ## Auto Sync
 
