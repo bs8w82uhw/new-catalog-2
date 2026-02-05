@@ -1,5 +1,5 @@
 ---
-{}
+title: docs-change
 ---
 
 ## Documentation Change
@@ -11,6 +11,7 @@
 ### Scope
 
 -  Changed files:
+
 -  Related SOP/policy pages:
 
 ### Metadata Update
